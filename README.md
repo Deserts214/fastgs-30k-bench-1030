@@ -36,3 +36,20 @@ bash setup.sh
 BASE=/data/ffsplat/official/baseline bash run_fastgs_30k.sh
 cat timings.txt
 ```
+
+## Measured (2026-10-30, RTX 4090 24 GB, organizer Module A work dirs, ReSplat PLY init)
+
+| group | scene | FastGS 30000 steps | note |
+|---|---|---:|---|
+| dl3dv | 001dccbc…5f | **127 s** | 288 train views |
+| mipnerf360 | counter | **133 s** | 210 train views |
+| hw | billboard | **129 s** | 56 train views |
+
+Machine notes: container has an 11-CPU quota and shares one 4090, so these wall times
+include host-side starvation; compare against classic-3DGS 30k on the same host
+(dl3dv 568 s, counter 529 s measured here). The bound is iteration-bound, not
+scene-bound: all three land at 127-133 s.
+
+Implication for Module B: the budget is ~130 s on every scene. A 6000-update MCMC
+run (115-134 s) sits at 87-101% of it, i.e. almost no time credit and one scene
+invalid under the strict `<` rule; full time credit (<=10%) allows only ~13 s.
