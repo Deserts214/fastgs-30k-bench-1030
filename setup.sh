@@ -5,7 +5,7 @@
 # `diff_gaussian_rasterization_fastgs` package must come from FastGS upstream.
 set -euo pipefail
 
-FASTGS_REPO="${FASTGS_REPO:-https://github.com/Gaozh/FastGS.git}"
+FASTGS_REPO="${FASTGS_REPO:-https://github.com/fastgs/FastGS.git}"
 SRC="${FASTGS_SRC:-$PWD/_fastgs}"
 
 export CUDA_HOME="${CUDA_HOME:-/usr/local/cuda}"
