@@ -1,0 +1,4 @@
+_fastgs/
+timings.txt
+*.pyc
+__pycache__/
