@@ -20,6 +20,13 @@ fi
 echo "[setup] submodules"
 git -C "$SRC" submodule update --init --recursive --depth 1 || true
 
+echo "[setup] patching missing <cstdint> includes (GCC 13+ no longer transitively includes it)"
+RASTER_DIR="$(dirname "$(find "$SRC/submodules" -name setup.py -path '*rasterization*' | head -1)")"
+for f in "$RASTER_DIR"/cuda_rasterizer/*.h "$RASTER_DIR"/cuda_rasterizer/*.cu; do
+  [ -f "$f" ] || continue
+  grep -q cstdint "$f" || sed -i '1i #include <cstdint>' "$f"
+done
+
 echo "[setup] building rasterizer"
 shopt -s nullglob
 built=0
@@ -41,3 +48,4 @@ try:
 except Exception as exc:  # noqa: BLE001
     raise SystemExit(f"[setup] import failed: {exc}")
 PY
+
